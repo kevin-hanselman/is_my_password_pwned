@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash 
 
 set -eo pipefail
 
@@ -31,8 +31,13 @@ echo
 echo 'Looking up your password...'
 
 raw_count=$(curl -s "https://api.pwnedpasswords.com/range/$hash_prefix" | grep -i "$hash_suffix" | cut -d':' -f2 || true)
-# printf doesn't like some of the characters in the response text, but Python obliges
-count=$(python -c "print(int($raw_count))")
+
+# Remove carriage return
+if [ ${raw_count:(-1):1} == $'\r' ]; then
+	count=${raw_count::-1}
+else
+	count=$raw_count
+fi
 
 printf "Your password appears in the Pwned Passwords database %u time(s).\\n" "$count"
 
