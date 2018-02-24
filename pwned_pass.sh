@@ -33,8 +33,8 @@ echo 'Looking up your password...'
 raw_count=$(curl -s "https://api.pwnedpasswords.com/range/$hash_prefix" | grep -i "$hash_suffix" | cut -d':' -f2 || true)
 
 # Remove carriage return
-if [ ${raw_count:(-1):1} == $'\r' ]; then
-	count=${raw_count::-1}
+if [ ${raw_count: (-1) : 1} == $'\r' ]; then
+	count=${raw_count: : -1}
 else
 	count=$raw_count
 fi
