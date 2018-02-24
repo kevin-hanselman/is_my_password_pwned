@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 
 set -eo pipefail
 
@@ -30,7 +30,7 @@ echo "Hash suffix: $hash_suffix"
 echo
 echo 'Looking up your password...'
 
-raw_count=$(curl -s "https://api.pwnedpasswords.com/range/$hash_prefix" | grep -i "$hash_suffix" | cut -d':' -f2 || true)
+raw_count=$(curl -s "https://api.pwnedpasswords.com/range/$hash_prefix" | grep -i "$hash_suffix" | cut -d':' -f2 || echo 0)
 
 # Remove carriage return
 if [ ${raw_count: (-1) : 1} == $'\r' ]; then
