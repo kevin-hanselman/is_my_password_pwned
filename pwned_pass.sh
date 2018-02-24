@@ -29,11 +29,7 @@ if [ -z "$password" ]; then
 fi
 set -u
 
-if [ $(uname) == "Linux" ]; then
-    hash=$(printf "%s" "$password" | openssl sha1 | awk '{print $2}')
-elif [ $(uname) == "Darwin" ]; then
-    hash=$(printf "%s" "$password" | openssl sha1 | awk '{print $1}')
-fi
+hash=$(printf "%s" "$password" | openssl sha1 | awk '{print $NF}')
     
 unset password
 hash_prefix=$(echo "$hash" | cut -c -5)
@@ -57,7 +53,7 @@ elif [ $(uname) == "Darwin" ]; then
     count=$( echo "$response" \
                  | grep -i "$hash_suffix" \
                  | cut -d':' -f2 \
-                 | egrep -o '\d+' \
+                 | grep -Eo '\d+' \
                  || echo 0)
 fi
 
