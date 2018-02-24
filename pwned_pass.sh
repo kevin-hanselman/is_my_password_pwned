@@ -43,19 +43,12 @@ echo 'Looking up your password...'
 response=$(curl -s "https://api.pwnedpasswords.com/range/$hash_prefix") \
     || fatal 'Failed to query the Pwned Passwords API'
 
-if [ $(uname) == "Linux" ]; then
-    count=$( echo "$response" \
-                 | grep -i "$hash_suffix" \
-                 | cut -d':' -f2 \
-                 | grep -Po '\d+' \
-                 || echo 0)
-elif [ $(uname) == "Darwin" ]; then
-    count=$( echo "$response" \
-                 | grep -i "$hash_suffix" \
-                 | cut -d':' -f2 \
-                 | grep -Eo '\d+' \
-                 || echo 0)
-fi
+count=$( echo "$response" \
+             | grep -i "$hash_suffix" \
+             | cut -d':' -f2 \
+             | grep -Eo '[0-9]+' \
+             || echo 0)
+
 
 printf "Your password appears in the Pwned Passwords database %d time(s).\\n" "$count"
 
