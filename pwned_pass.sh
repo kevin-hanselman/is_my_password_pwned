@@ -2,25 +2,34 @@
 
 set -eo pipefail
 
+prog=$(basename "$0")
+
+fatal() {
+    echo >&2 "$prog: $1"
+    exit 1
+}
+
+password=
 case "$1" in
     -h|--help)
-        echo "usage: $(basename "$0") [password (or you will be prompted)]"
+        echo "usage: $prog [password (or you will be prompted)]"
         exit 0
+        ;;
+    *)
+        password=$1
         ;;
 esac
 
 echo 'Reminder: This tool does not check password strength!'
 
-if [ -n "$1" ]; then
-    password="$1"
-else
-    echo -n "Type a password to check: "
+if [ -z "$password" ]; then
+    printf "Type a password to check: "
     read -r -s password
     echo
 fi
 set -u
 
-hash=$(echo -n "$password" | sha1sum | awk '{print $1}')
+hash=$(printf "%s" "$password" | openssl sha1 | awk '{print $2}')
 unset password
 hash_prefix=$(echo "$hash" | cut -c -5)
 hash_suffix=$(echo "$hash" | cut -c 6-)
@@ -30,11 +39,16 @@ echo "Hash suffix: $hash_suffix"
 echo
 echo 'Looking up your password...'
 
-raw_count=$(curl -s "https://api.pwnedpasswords.com/range/$hash_prefix" | grep -i "$hash_suffix" | cut -d':' -f2 || true)
-# printf doesn't like some of the characters in the response text, but Python obliges
-count=$(python -c "print(int($raw_count))")
+response=$(curl -s "https://api.pwnedpasswords.com/range/$hash_prefix") \
+    || fatal 'Failed to query the Pwned Passwords API'
 
-printf "Your password appears in the Pwned Passwords database %u time(s).\\n" "$count"
+count=$( echo "$response" \
+    | grep -i "$hash_suffix" \
+    | cut -d':' -f2 \
+    | grep -Po '\d+' \
+    || echo 0)
+
+printf "Your password appears in the Pwned Passwords database %d time(s).\\n" "$count"
 
 if [ "$count" -ge 100 ]; then
     echo 'Your password is thoroughly pwned! DO NOT use this password for any reason!'
