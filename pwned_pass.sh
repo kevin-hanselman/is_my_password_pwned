@@ -29,7 +29,12 @@ if [ -z "$password" ]; then
 fi
 set -u
 
-hash=$(printf "%s" "$password" | openssl sha1 | awk '{print $2}')
+if [ $(uname) == "Linux" ]; then
+    hash=$(printf "%s" "$password" | openssl sha1 | awk '{print $2}')
+elif [ $(uname) == "Darwin" ]; then
+    hash=$(printf "%s" "$password" | openssl sha1 | awk '{print $1}')
+fi
+    
 unset password
 hash_prefix=$(echo "$hash" | cut -c -5)
 hash_suffix=$(echo "$hash" | cut -c 6-)
@@ -42,11 +47,19 @@ echo 'Looking up your password...'
 response=$(curl -s "https://api.pwnedpasswords.com/range/$hash_prefix") \
     || fatal 'Failed to query the Pwned Passwords API'
 
-count=$( echo "$response" \
-    | grep -i "$hash_suffix" \
-    | cut -d':' -f2 \
-    | grep -Po '\d+' \
-    || echo 0)
+if [ $(uname) == "Linux" ]; then
+    count=$( echo "$response" \
+                 | grep -i "$hash_suffix" \
+                 | cut -d':' -f2 \
+                 | grep -Po '\d+' \
+                 || echo 0)
+elif [ $(uname) == "Darwin" ]; then
+    count=$( echo "$response" \
+                 | grep -i "$hash_suffix" \
+                 | cut -d':' -f2 \
+                 | egrep -o '\d+' \
+                 || echo 0)
+fi
 
 printf "Your password appears in the Pwned Passwords database %d time(s).\\n" "$count"
 
