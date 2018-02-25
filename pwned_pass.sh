@@ -29,7 +29,8 @@ if [ -z "$password" ]; then
 fi
 set -u
 
-hash=$(printf "%s" "$password" | openssl sha1 | awk '{print $2}')
+hash=$(printf "%s" "$password" | openssl sha1 | awk '{print $NF}')
+    
 unset password
 hash_prefix=$(echo "$hash" | cut -c -5)
 hash_suffix=$(echo "$hash" | cut -c 6-)
@@ -43,10 +44,11 @@ response=$(curl -s "https://api.pwnedpasswords.com/range/$hash_prefix") \
     || fatal 'Failed to query the Pwned Passwords API'
 
 count=$( echo "$response" \
-    | grep -i "$hash_suffix" \
-    | cut -d':' -f2 \
-    | grep -Po '\d+' \
-    || echo 0)
+             | grep -i "$hash_suffix" \
+             | cut -d':' -f2 \
+             | grep -Eo '[0-9]+' \
+             || echo 0)
+
 
 printf "Your password appears in the Pwned Passwords database %d time(s).\\n" "$count"
 
