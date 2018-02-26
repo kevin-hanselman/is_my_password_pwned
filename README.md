@@ -3,7 +3,9 @@ Find out how often your password appears in [Troy Hunt's Pwned Passwords databas
 
 Uses [the k-anonymity API](https://blog.cloudflare.com/validating-leaked-passwords-with-k-anonymity/) to keep your password from leaving your PC.
 
-Written in concise Bash for transparency and portability.
+Forked and re-writen using C# then compiled for windows, get it in C# folder, download exe at your own risk.
+
+Original one was written in concise Bash for transparency and portability.
 
 ```
 $ ./pwned_pass.sh
