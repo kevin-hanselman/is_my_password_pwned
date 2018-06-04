@@ -1,0 +1,37 @@
+﻿<Page
+    x:Class="checkpswd.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Pivot Title="IMPP?">
+        <PivotItem Header="CHECK PSWD">
+            <StackPanel HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Orientation="Vertical" RequestedTheme="Default">
+                <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Text="Is my password Pwned?" TextWrapping="Wrap" VerticalAlignment="Center" Style="{ThemeResource SubheaderTextBlockStyle}" Margin="20,20,20,20"/>
+                <TextBlock x:Name="textDescription" HorizontalAlignment="Stretch" Text="Find out how often your password appears in Troy Hunt's Pwned Passwords database." TextWrapping="WrapWholeWords" Margin="20,20,20,20" Style="{ThemeResource TitleTextBlockStyle}"/>
+                <TextBlock x:Name="textDescription_Copy" HorizontalAlignment="Left" TextWrapping="WrapWholeWords" Margin="20,0,20,20" Style="{ThemeResource TitleTextBlockStyle}" VerticalAlignment="Center" ><Run Text="Input a password here to check it out."/><LineBreak/><Run Text="Note:"/><LineBreak/><Run Text="Your password "/><Run Text="will not be sent to anywhere, this app only needs a few bytes from the hash code."/></TextBlock>
+                <StackPanel VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Stretch">
+                    <PasswordBox x:Name="passwordBox" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="20,20,20,20"  PlaceholderText="Type a password here" MinWidth="200" KeyDown="passwordBox_KeyDown" />
+                    <Button x:Name="checkbutton" Content="CHECK" Margin="20,0,0,0" Click="Button_Click" RequestedTheme="Default" HorizontalAlignment="Stretch" VerticalAlignment="Center" MinWidth="100" />
+                </StackPanel>
+                <TextBlock Text="* This app requires Internet Connection." Style="{StaticResource BodyTextBlockStyle}" Margin="20,0,0,0" Foreground="#FFFF8585"/>
+                <TextBlock x:Name="textTips" HorizontalAlignment="Left" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Margin="20,0,0,0" Style="{ThemeResource TitleTextBlockStyle}" />
+       
+            </StackPanel>
+        </PivotItem>
+        <PivotItem Header="ABOUT IMPP?">
+            <StackPanel HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Orientation="Vertical" RequestedTheme="Default">
+                <TextBlock HorizontalAlignment="Left" Text="ABOUT THIS APP" TextWrapping="Wrap" VerticalAlignment="Center" Style="{ThemeResource SubheaderTextBlockStyle}" Margin="20,20,20,20"/>
+                <TextBlock HorizontalAlignment="Stretch" Text="This app is inspired by kevlar1818's script to check if a password is appeared in the Troy Hunt's Pwned Passwords database, which is opensourced at Github." TextWrapping="WrapWholeWords" Margin="20,20,20,20" Style="{ThemeResource TitleTextBlockStyle}"/>
+                <HyperlinkButton NavigateUri=" https://github.com/kevlar1818/is_my_password_pwned " Margin="20,0,0,0" Style="{ThemeResource PivotTitleContentControlStyle}">https://github.com/kevlar1818/is_my_password_pwned</HyperlinkButton>
+                <TextBlock HorizontalAlignment="Stretch" Text="This app is opensourced too, please feel free to submit issues / fork sources etc." TextWrapping="WrapWholeWords" Margin="20,20,20,20" Style="{ThemeResource TitleTextBlockStyle}"/>
+                <HyperlinkButton NavigateUri="https://github.com/anpho/is_my_password_pwned" Margin="20,0,0,0" Style="{ThemeResource PivotTitleContentControlStyle}">https://github.com/anpho/is_my_password_pwned</HyperlinkButton>
+            </StackPanel>
+        </PivotItem>
+    </Pivot>
+
+
+</Page>
