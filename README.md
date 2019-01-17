@@ -16,3 +16,9 @@ Looking up your password...
 Your password appears in the Pwned Passwords database 3303003 time(s).
 Your password is thoroughly pwned! DO NOT use this password for any reason!
 ```
+
+To test many passwords at once:
+```
+$ cat passwords.txt | ./pwned_many_passwords.sh
+```
+Where each line is one password.
